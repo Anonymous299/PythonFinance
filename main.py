@@ -7,4 +7,4 @@ start = dt.datetime(2000,1,1)
 end = dt.datetime(2020, 12, 31)
 
 df = web.DataReader('TSLA', 'yahoo', start, end)
-print(df.tail(6))
+df.to_csv('tsla.csv')
