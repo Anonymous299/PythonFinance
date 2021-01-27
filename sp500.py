@@ -72,7 +72,7 @@ def create_joined_table():
             else:
                 main_dfs = main_dfs.join(stock_dfs, how="outer")
 
-    print(main_dfs.head())
+    main_dfs.to_csv('stock_dfs/sp500close.csv')
     # for key in data['MSFT'].keys():
     #     print(key)
 
