@@ -7,6 +7,11 @@ import pandas as pd
 from pandas_datareader import data as pdr
 import yfinance as yf
 import time
+import seaborn as sns
+import matplotlib.pyplot as plt
+from matplotlib import style
+
+style.use('ggplot')
 
 def save_sp500_tickers():
     resp = requests.get('https://en.wikipedia.org/wiki/List_of_S%26P_500_companies')
@@ -84,7 +89,8 @@ def visualize_data():
     main_dfs = pd.read_csv('stock_dfs/sp500close.csv')
     corr_dfs = main_dfs.corr()
 
-    print(corr_dfs.head)
+    sns.heatmap(corr_dfs,cmap='RdYlGn')
+    plt.show()
 
 # get_data_from_yahoo()
 # create_joined_table()
