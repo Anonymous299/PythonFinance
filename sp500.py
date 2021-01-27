@@ -38,19 +38,43 @@ def get_data_from_yahoo(reload_sp500_ticker=False, reload_sp500_data=False):
 ##    start = dt.datetime(2000, 1, 1)
 ##    end = dt.datetime(2020, 12, 31)
 
-    if reload_sp500_data or not os.path.exists('stock_dfs/sp500data.csv'):
+    if reload_sp500_data or not os.path.exists('stock_dfs/sp500data.pickle'):
         ticker_string = ''
         for ticker in tickers:
             ticker_string += ' ' + ticker
 
-        data = yf.download(tickers = ticker_string, period="10y",
-                       interval="1d", group_by='ticker', auto_adjust = True,
-                       thread = True)
-        data.to_csv('stock_dfs/sp500data.csv')
+        data = yf.download(tickers = ticker_string, period="10y", 
+            group_by='ticker', thread = True)
+
+        data.to_pickle('stock_dfs/sp500data.pickle')
 
     else:
         print('Already have data')
             
-        
+def create_joined_table():
+    if not os.path.exists('stock_dfs/sp500data.pickle'):
+        print('Data does not exist')
+        return
+
+    with open('stock_dfs/sp500data.pickle', 'rb') as f:
+        data = pd.read_pickle(f)
+
+    main_dfs = pd.DataFrame()
+
+    for (ticker, col) in data:
+        if(col == 'Adj Close'):
+            stock_dfs = data[ticker]
+            stock_dfs.rename(columns = {'Adj Close': ticker}, inplace=True)
+            stock_dfs.drop(['Open', 'High', 'Low', 'Close', 'Volume'], 1, inplace=True)
+
+            if(main_dfs.empty):
+                main_dfs = stock_dfs
+            else:
+                main_dfs = main_dfs.join(stock_dfs, how="outer")
+
+    print(main_dfs.head())
+    # for key in data['MSFT'].keys():
+    #     print(key)
 
 get_data_from_yahoo()
+create_joined_table()
