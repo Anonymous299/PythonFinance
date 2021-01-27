@@ -76,5 +76,16 @@ def create_joined_table():
     # for key in data['MSFT'].keys():
     #     print(key)
 
-get_data_from_yahoo()
-create_joined_table()
+def visualize_data():
+    if not os.path.exists('stock_dfs/sp500close.csv'):
+        print('Data does not exist')
+        return
+
+    main_dfs = pd.read_csv('stock_dfs/sp500close.csv')
+    corr_dfs = main_dfs.corr()
+
+    print(corr_dfs.head)
+
+# get_data_from_yahoo()
+# create_joined_table()
+visualize_data()
