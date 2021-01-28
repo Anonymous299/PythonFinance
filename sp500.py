@@ -92,6 +92,9 @@ def visualize_data():
     corr_dfs = main_dfs.corr()
     # corr_dfs.to_csv('analysis/price_correlation/price_corr.csv')
 
+    mean_corr = corr_dfs.mean()
+    print(mean_corr.where(mean_corr.values < 0).dropna())
+
     sns.heatmap(corr_dfs,cmap='RdYlGn', xticklabels=True, yticklabels=True)
     plt.show()
 
