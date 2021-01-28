@@ -87,9 +87,11 @@ def visualize_data():
         return
 
     main_dfs = pd.read_csv('stock_dfs/sp500close.csv')
+    main_dfs.set_index('Date', inplace=True) 
+    # corr_dfs = main_dfs.pct_change().corr()
     corr_dfs = main_dfs.corr()
 
-    sns.heatmap(corr_dfs,cmap='RdYlGn')
+    sns.heatmap(corr_dfs,cmap='RdYlGn', xticklabels=True, yticklabels=True)
     plt.show()
 
 # get_data_from_yahoo()
