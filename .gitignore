@@ -5,3 +5,4 @@ pyvenv.cfg
 share/
 stock_dfs/
 *.csv
+!price_corr.csv
