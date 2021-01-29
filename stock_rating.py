@@ -15,4 +15,15 @@ def preprocess_stock_data(ticker):
 	print(main_dfs)
 	return tickers, main_dfs
 
-df = preprocess_stock_data('AAPL')
+# Proxy function to classify stock as buy, sell or hold according 
+# to pct change in the next 7 days
+def buy_sell_hold(*args):
+	cols = [c for c in args]
+	req = 0.02
+
+	for col in cols:
+		if col > req:
+			return 1
+		if col < -req:
+			return -1
+	return 0
