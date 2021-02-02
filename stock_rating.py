@@ -59,17 +59,20 @@ def extract_featureset(ticker):
 def perform_ml(ticker):
 	X, y, df = extract_featureset(ticker)
 	print(X.shape, y.shape)
-	X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)
 	
 	clf = neighbors.KNeighborsClassifier()
-	clf.fit(X_train, y_train)
-	confidence = clf.score(X_test, y_test)
-	print('Accuracy', confidence)
 
-	predicitions = clf.predict(X_test)
-	print('Data spread:', Counter(predicitions))
-
-	return confidence
+	mean = 0
+	for i in range(100):
+		X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)
+		clf.fit(X_train, y_train)
+		confidence = clf.score(X_test, y_test)
+		# print('Accuracy', confidence)
+		mean+=confidence
+		# predicitions = clf.predict(X_test)
+		# print('Data spread:', Counter(predicitions))
+	print(mean)
+	return mean
 
 # preprocess_stock_data('AAPL')
 # extract_featureset('AAPL')
