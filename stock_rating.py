@@ -1,6 +1,9 @@
 import pandas as pd
 import numpy as np
 from collections import Counter
+from sklearn import svm, neighbors
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import VotingClassifier, RandomForestClassifier
 
 # Preprocess stock data for machine learning algorithm
 # Creates column which calculates pct change in stock upto 7 days
@@ -38,7 +41,7 @@ def extract_featureset(ticker):
 	# Calculating spread of ratings
 	vals = df['{}_rating'.format(ticker)].values.tolist()
 	str_vals = [str(i) for i in vals]
-	print('Rating spread:', Counter(str_vals))
+	# print('Rating spread:', Counter(str_vals))
 	df.fillna(0, inplace=True)
 
 	df = df.replace([np.inf, -np.inf], np.nan)
@@ -53,5 +56,21 @@ def extract_featureset(ticker):
 
 	return X, y, df
 
+def perform_ml(ticker):
+	X, y, df = extract_featureset(ticker)
+	print(X.shape, y.shape)
+	X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)
+	
+	clf = neighbors.KNeighborsClassifier()
+	clf.fit(X_train, y_train)
+	confidence = clf.score(X_test, y_test)
+	print('Accuracy', confidence)
+
+	predicitions = clf.predict(X_test)
+	print('Data spread:', Counter(predicitions))
+
+	return confidence
+
 # preprocess_stock_data('AAPL')
-extract_featureset('AAPL')
+# extract_featureset('AAPL')
+perform_ml('AAPL')
